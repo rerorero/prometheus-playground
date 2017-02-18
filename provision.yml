@@ -1,0 +1,8 @@
+---
+- hosts: monitor
+  roles:
+    - prometheus-server
+
+- hosts: node
+  roles:
+    - prometheus-node

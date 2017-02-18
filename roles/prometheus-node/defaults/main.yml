@@ -1,0 +1,5 @@
+---
+prometheus_node_version: 0.13.0
+
+# see https://github.com/prometheus/node_exporter
+prometheus_node_exec_opts: ""

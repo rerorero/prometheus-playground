@@ -1,0 +1,9 @@
+[monitor]
+192.168.33.101
+
+[node]
+192.168.33.102
+
+[all:vars]
+ansible_ssh_user=vagrant
+ansible_ssh_pass=vagrant
