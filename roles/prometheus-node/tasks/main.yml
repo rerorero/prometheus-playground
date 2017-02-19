@@ -1,7 +1,7 @@
 ---
 - name: download prometheus node exporter
   unarchive:
-    src: "https://github.com/prometheus/node_exporter/releases/download/v{{ prometheus_node_version }}/node_exporter-{{ prometheus_node_version }}.linux-386.tar.gz"
+    src: "https://github.com/prometheus/node_exporter/releases/download/v{{ prometheus_node_version }}/node_exporter-{{ prometheus_node_version }}.linux-amd64.tar.gz"
     dest: "{{ prometheus_pkg_dir }}"
     remote_src: yes
     owner: "{{ prometheus_user }}"
@@ -11,7 +11,7 @@
 
 - name: symlink to node_exporter bin
   file:
-    src: "{{ prometheus_pkg_dir }}/node_exporter-{{ prometheus_node_version }}.linux-386/node_exporter"
+    src: "{{ prometheus_pkg_dir }}/node_exporter-{{ prometheus_node_version }}.linux-amd64/node_exporter"
     dest: "{{ prometheus_bin_base }}/node_exporter"
     owner: "{{ prometheus_user }}"
     group: "{{ prometheus_group }}"

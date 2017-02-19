@@ -7,13 +7,10 @@ After=basic.target network.target
 Type=simple
 User={{ prometheus_user }}
 Group={{ prometheus_group }}
-Restart=on-failure
-PIDFile=/var/run/node_exporter.pid
-ExecStart={{ prometheus_bin_base }}/node_exporter {{ prometheus_node_exec_opts }}
+ExecStart=/bin/sh -c "{{ prometheus_bin_base }}/node_exporter {{ prometheus_node_exec_opts }} > {{ prometheus_log_dir }}/node_exporter.log 2>&1"
 ExecReload=/bin/kill -HUP $MAINPID
 ExecStop=/bin/kill -TERM $MAINPID
 KillMode=process
-RestartSec=5s
 
 [Install]
 WantedBy=multi-user.target

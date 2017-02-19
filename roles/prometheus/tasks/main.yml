@@ -22,5 +22,6 @@
   with_items:
     - "{{ prometheus_pkg_dir }}"
     - "{{ prometheus_conf_base }}"
+    - "{{ prometheus_log_dir }}"
   become: yes
 

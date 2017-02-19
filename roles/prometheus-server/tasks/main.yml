@@ -10,7 +10,7 @@
 
 - name: download prometheus server
   unarchive:
-    src: "https://github.com/prometheus/prometheus/releases/download/v{{ prometheus_server_version }}/prometheus-{{ prometheus_server_version }}.linux-386.tar.gz"
+    src: "https://github.com/prometheus/prometheus/releases/download/v{{ prometheus_server_version }}/prometheus-{{ prometheus_server_version }}.linux-amd64.tar.gz"
     dest: "{{ prometheus_pkg_dir }}"
     remote_src: yes
     owner: "{{ prometheus_user }}"
@@ -20,7 +20,7 @@
 
 - name: symlink to prometheus bin
   file:
-    src: "{{ prometheus_pkg_dir }}/prometheus-{{ prometheus_server_version }}.linux-386/prometheus"
+    src: "{{ prometheus_pkg_dir }}/prometheus-{{ prometheus_server_version }}.linux-amd64/prometheus"
     dest: "{{ prometheus_bin_base }}/prometheus"
     owner: "{{ prometheus_user }}"
     group: "{{ prometheus_group }}"
