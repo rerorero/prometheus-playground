@@ -1,3 +1,9 @@
+[monitor-view]
+192.168.33.101
+
+[monitor-alert]
+192.168.33.102
+
 [monitor]
 192.168.33.101
 

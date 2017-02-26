@@ -1,0 +1,52 @@
+global:
+  # ResolveTimeout is the time after which an alert is declared resolved
+  # if it has not been updated.
+  # [ resolve_timeout: <duration> | default = 5m ]
+
+  # The default SMTP From header field.
+  # [ smtp_from: <tmpl_string> ]
+  # The default SMTP smarthost used for sending emails.
+  # [ smtp_smarthost: <string> ]
+  # SMTP authentication information.
+  # [ smtp_auth_username: <string> ]
+  # [ smtp_auth_password: <string> ]
+  # [ smtp_auth_secret: <string> ]
+  # The default SMTP TLS requirement.
+  # [ smtp_require_tls: <bool> | default = true ]
+
+  # The API URL to use for Slack notifications.
+  # [ slack_api_url: <string> ]
+  slack_api_url: https://hooks.slack.com/services/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
+
+  # [ pagerduty_url: <string> | default = "https://events.pagerduty.com/generic/2010-04-15/create_event.json" ]
+  # [ opsgenie_api_host: <string> | default = "https://api.opsgenie.com/" ]
+  # [ hipchat_url: <string> | default = "https://api.hipchat.com/" ]
+  # [ hipchat_auth_token: <string> ]
+
+# Files from which custom notification template definitions are read.
+# The last component may use a wildcard matcher, e.g. 'templates/*.tmpl'.
+# templates:
+#   [ - <filepath> ... ]
+
+# The root node of the routing tree.
+route:
+  receiver: slack
+  group_by: ['alertname']
+  group_wait:      10s
+  group_interval:  1m
+  repeat_interval: 2h
+
+# A list of notification receivers.
+receivers:
+  - name: slack
+    slack_configs:
+      - channel: '#test'
+        send_resolved: true
+        pretext: pre-text
+        text: text
+        icon_emoji: octopus
+
+
+# A list of inhibition rules.
+# inhibit_rules:
+#   [ - <inhibit_rule> ... ]

@@ -8,9 +8,6 @@ Type=simple
 User={{ prometheus_user }}
 Group={{ prometheus_group }}
 ExecStart=/bin/sh -c "{{ prometheus_bin_base }}/node_exporter {{ prometheus_node_exec_opts }} > {{ prometheus_log_dir }}/node_exporter.log 2>&1"
-ExecReload=/bin/kill -HUP $MAINPID
-ExecStop=/bin/kill -TERM $MAINPID
-KillMode=process
 
 [Install]
 WantedBy=multi-user.target

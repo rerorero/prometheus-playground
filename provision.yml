@@ -1,8 +1,17 @@
 ---
+- hosts: node
+  roles:
+    - prometheus-node
+
+- hosts: monitor-alert
+  roles:
+    - prometheus-alertmanager
+
 - hosts: monitor
   roles:
     - prometheus-server
 
-- hosts: node
+- hosts: monitor-view
   roles:
-    - prometheus-node
+    - grafana
+

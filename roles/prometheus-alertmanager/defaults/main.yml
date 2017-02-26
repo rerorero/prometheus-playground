@@ -1,0 +1,4 @@
+---
+prometheus_am_version: 0.5.1
+prometheus_am_strage_path: /var/prometheus/data
+

@@ -1,0 +1,63 @@
+---
+- name: setup directories for alertmanager
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: "{{ prometheus_user }}"
+    group: "{{ prometheus_group }}"
+    mode: 0755
+  with_items:
+    - "{{ prometheus_am_strage_path }}"
+  become: yes
+
+- name: download alertmanager
+  unarchive:
+    src: "https://github.com/prometheus/alertmanager/releases/download/v{{ prometheus_am_version }}/alertmanager-{{ prometheus_am_version }}.linux-amd64.tar.gz"
+    dest: "{{ prometheus_pkg_dir }}"
+    remote_src: yes
+    owner: "{{ prometheus_user }}"
+    group: "{{ prometheus_group }}"
+    mode: 0755
+  become: yes
+
+- name: symlink to alertmanager bin
+  file:
+    src: "{{ prometheus_pkg_dir }}/alertmanager-{{ prometheus_am_version }}.linux-amd64/alertmanager"
+    dest: "{{ prometheus_bin_base }}/alertmanager"
+    owner: "{{ prometheus_user }}"
+    group: "{{ prometheus_group }}"
+    state: link
+    mode: 0755
+  become: yes
+  notify:
+    - restart alertmanager
+
+- name: setup systemd services
+  template:
+    src: "alertmanager.service.j2"
+    dest: "{{ systemd_service_dir }}/alertmanager.service"
+    owner: root
+    group: root
+    mode: 0644
+  become: yes
+  notify:
+    - reload systemd
+    - restart alertmanager
+
+- name: setup alertmanager config
+  template:
+    src: "alertmanager.yml.j2"
+    dest: "{{ prometheus_conf_base }}/alertmanager.yml"
+    owner: "{{ prometheus_user }}"
+    group: "{{ prometheus_user }}"
+    mode: 0644
+  become: yes
+  notify:
+    - restart alertmanager
+
+- name: enable alertmanager
+  service:
+    name: alertmanager
+    state: started
+    enabled: yes
+  become: yes
