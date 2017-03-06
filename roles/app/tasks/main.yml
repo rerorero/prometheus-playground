@@ -1,0 +1,10 @@
+---
+- name: build dummy client application
+  local_action: command chdir=client sbt assembly
+
+- name: copy dummy client application
+  copy:
+    src: client/target/scala-2.11/dummy_client.jar
+    dest: /usr/local/bin/dummy_client.jar
+    mode: 0755
+  become: yes

@@ -2,6 +2,7 @@
 - hosts: node
   roles:
     - prometheus-node
+    - app
 
 - hosts: monitor-alert
   roles:
