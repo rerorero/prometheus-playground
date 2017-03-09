@@ -1,8 +1,8 @@
-ALERT InstanceDown
-  IF up == 0
-  FOR 10s
+ALERT counter_over30
+  IF playground_counter{key1="tick1"} > 30
+  FOR 3s
   ANNOTATIONS {
-    summary = "Instance {{ $labels.instance }} down",
-    description = "{{ $labels.instance }} of job {{ $labels.job }} has been down for more than 5 minutes.",
+    summary = "Instance {{ $labels.instance }} counts over",
+    description = "{{ $labels.instance }} of job {{ $labels.job }} alert.",
   }
 

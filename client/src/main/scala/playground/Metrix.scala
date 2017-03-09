@@ -1,11 +1,14 @@
 package playground
 
+import java.io.{ByteArrayOutputStream, OutputStreamWriter}
+
 import akka.actor.{Actor, ActorLogging, Props}
-import io.prometheus.client.exporter.MetricsServlet
 import io.prometheus.client.hotspot.DefaultExports
-import io.prometheus.client.{Counter, Gauge, Histogram, Summary}
-import org.eclipse.jetty.server.Server
-import org.eclipse.jetty.servlet.{ServletContextHandler, ServletHolder}
+import io.prometheus.client._
+import io.prometheus.client.exporter.common.TextFormat
+import playground.http.{HttpActionResponse, HttpEndpoint, HttpServerConf, SimpleHttpServer}
+
+import scala.util.Try
 
 object Metrix {
   val counter = Counter.build()
@@ -32,16 +35,31 @@ object Metrix {
 
 
 class MetrixServer(port: Int) extends Actor with ActorLogging {
-  val server = new Server(port)
-  val handler = new ServletContextHandler()
+
+  val conf = HttpServerConf(port)
+  val server = SimpleHttpServer(conf)(
+    HttpEndpoint.get("/metrics") { req =>
+      //HttpActionResponse.ok("received!!" + req.toString)
+
+      val os = new ByteArrayOutputStream()
+      val writer = new OutputStreamWriter(os)
+      val body = try {
+        TextFormat.write004(writer, CollectorRegistry.defaultRegistry.metricFamilySamples())
+        writer.flush()
+        os.toByteArray
+      } finally {
+        writer.close()
+        os.close()
+      }
+      HttpActionResponse.ok(body, TextFormat.CONTENT_TYPE_004)
+    }
+  )
 
   def receive = {
     case "start" =>
-      handler.setContextPath("/")
-      server.setHandler(handler)
-      handler.addServlet(new ServletHolder(new MetricsServlet()), "/metrics")
-      DefaultExports.initialize()
+      log.info(s"server start: $port")
       server.start()
+      DefaultExports.initialize()
       log.info(s"server started on port $port")
       context.become(started())
     case "stop" =>
@@ -52,9 +70,8 @@ class MetrixServer(port: Int) extends Actor with ActorLogging {
     case "start" =>
       log.warning("server has been started.")
     case "stop" =>
-      log.info("server to stop")
-      server.stop()
-      log.info("server stopped")
+      server.shutdown()
+      log.info("server shutdown")
   }
 }
 

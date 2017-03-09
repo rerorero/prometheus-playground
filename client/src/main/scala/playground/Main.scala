@@ -55,9 +55,7 @@ object Main {
     val server = system.actorOf(MetrixServer.props(port))
 
     sys.addShutdownHook {
-      println("natoring stop")
       server ? "stop"
-      println("natoring stopped")
       Await.result(system.terminate(), Duration.Inf)
     }
 

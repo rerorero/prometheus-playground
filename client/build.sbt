@@ -12,7 +12,7 @@ lazy val root = (project in file(".")).
       "io.prometheus" % "simpleclient_hotspot" % clientVersion,
       "io.prometheus" % "simpleclient_servlet" % clientVersion,
       "io.prometheus" % "simpleclient_pushgateway" % clientVersion,
-      "org.eclipse.jetty" % "jetty-servlet" % "9.4.2.v20170220",
+      "io.netty"      % "netty-all" % "4.1.8.Final",
       "com.typesafe.akka" % "akka-actor_2.11" % "2.4.17"
     )
   ).
